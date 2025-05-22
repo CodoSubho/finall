@@ -5,7 +5,7 @@ import ChatBot from '../components/ChatBot'
 import { FiMessageCircle, FiX, FiLoader } from 'react-icons/fi'
 
 type FaceApiModuleType = typeof import('face-api.js');
-
+{/* timer set for stress check  */}
 const THIRTY_MINUTES_MS = 30 * 60 * 1000;
 //const THIRTY_MINUTES_MS = 5 * 1000; // For testing 10 seconds
 
