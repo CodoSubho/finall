@@ -44,16 +44,13 @@ export default function LecturePage() {
         !videoPreviewRef.current.srcObject || !isVideoStreamReady || videoPreviewRef.current.paused || videoPreviewRef.current.ended ||
         !showStressCheckModal || stressCheckStep !== 'capturing') {
 
-      // If still intended to be capturing but some condition (like video paused) fails,
-      // we might let the useEffect handle restarting if the condition resolves.
-      // For now, if the primary conditions (step, modal) aren't met, ensure loop stops.
+     
       if (!(showStressCheckModal && stressCheckStep === 'capturing')) {
           if (animationFrameIdRef.current) {
               cancelAnimationFrame(animationFrameIdRef.current);
               animationFrameIdRef.current = null;
           }
-      } else if (animationFrameIdRef.current){ // If capturing, but other things failed, keep trying
-          // If already running, let it be, next call will be scheduled by itself or useEffect
+      } else if (animationFrameIdRef.current){ 
       }
       return;
     }
@@ -62,7 +59,7 @@ export default function LecturePage() {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
 
-    if (!context) { // Should ideally not happen if canvasRef is valid
+    if (!context) { 
       if (animationFrameIdRef.current) cancelAnimationFrame(animationFrameIdRef.current);
       animationFrameIdRef.current = requestAnimationFrame(drawForeheadBox); // Try again
       return;
@@ -114,9 +111,9 @@ export default function LecturePage() {
       }
     }
 
-    // Recursive call for the loop, managed by the master switch (useEffect)
+    
     if (stressCheckStep === 'capturing' && showStressCheckModal) {
-        if (animationFrameIdRef.current) cancelAnimationFrame(animationFrameIdRef.current); // Ensure only one loop
+        if (animationFrameIdRef.current) cancelAnimationFrame(animationFrameIdRef.current); 
         animationFrameIdRef.current = requestAnimationFrame(drawForeheadBox);
     } else {
         if (animationFrameIdRef.current) {
@@ -146,10 +143,10 @@ export default function LecturePage() {
       }
     };
     loadFaceApiAndModels();
-  }, []); // Runs once on mount
+  }, []); 
 
 
-  // useEffect to control the drawing loop based on state
+  
   useEffect(() => {
     if (stressCheckStep === 'capturing' && showStressCheckModal && modelsLoaded && faceApiModel && isVideoStreamReady) {
       console.log("useEffect: Starting drawing loop.");
@@ -168,7 +165,7 @@ export default function LecturePage() {
           context?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
       }
     }
-    // Cleanup animation frame if the component unmounts or dependencies change causing effect to re-run
+    
     return () => {
       if (animationFrameIdRef.current) {
         cancelAnimationFrame(animationFrameIdRef.current);
@@ -211,9 +208,7 @@ export default function LecturePage() {
     if (videoPreviewRef.current) {
       videoPreviewRef.current.srcObject = null;
     }
-    setIsVideoStreamReady(false); // Stream is no longer ready
-    // The useEffect will handle stopping the drawing loop when isVideoStreamReady becomes false
-    // or other conditions like showStressCheckModal or stressCheckStep change.
+    setIsVideoStreamReady(false); 
   }, [currentStream]);
 
 
@@ -222,14 +217,13 @@ export default function LecturePage() {
     setShowStressCheckModal(true);
     setStressMetrics(null);
     cleanupCaptureTimers();
-    setIsVideoStreamReady(false); // Reset before starting
+    setIsVideoStreamReady(false); 
 
     if (!modelsLoaded || !faceApiModel) {
         setStressMetrics({ error: "Face detection tools are not ready. Please wait or try refreshing." });
-        setStressCheckStep('error'); // This will trigger useEffect to stop/not start loop
+        setStressCheckStep('error'); 
         return;
     }
-    // Set capturing step AFTER model check and before stream acquisition
     setStressCheckStep('capturing');
 
 
@@ -242,7 +236,7 @@ export default function LecturePage() {
         videoPreviewRef.current.srcObject = localStream;
         videoPreviewRef.current.onloadedmetadata = () => {
           videoPreviewRef.current?.play().then(() => {
-            setIsVideoStreamReady(true); // Stream is ready and playing, useEffect will pick this up
+            setIsVideoStreamReady(true); 
           }).catch(playError => {
             console.error("Error playing video preview:", playError);
             setStressMetrics({ error: "Could not play video preview." });
@@ -292,7 +286,7 @@ export default function LecturePage() {
           captureTimeoutRef.current = setTimeout(async () => {
             cleanupCaptureTimers();
             hiddenProcessingVideo.pause();
-            // Changing step will make useEffect stop the drawing loop
+        
             setStressCheckStep('analyzing');
 
             try {
@@ -345,15 +339,15 @@ export default function LecturePage() {
         errorMessage = "Camera access denied. Please allow camera access in your browser settings.";
       }
       setStressMetrics({ error: errorMessage });
-      setStressCheckStep('error'); // This will stop drawing loop via useEffect
+      setStressCheckStep('error'); 
       stopMediaStream();
       cleanupCaptureTimers();
     }
   };
 
   const handleCloseStressCheckModal = () => {
-    setShowStressCheckModal(false); // This will trigger useEffect to stop loop
-    setStressCheckStep(null);      // This will also trigger useEffect to stop loop
+    setShowStressCheckModal(false); 
+    setStressCheckStep(null);      
     stopMediaStream();
     cleanupCaptureTimers();
   };
@@ -467,9 +461,9 @@ export default function LecturePage() {
               <p className="text-center text-gray-300">Capturing video for 10 seconds. Please keep your forehead aligned.</p>
             )}
 
-            {stressCheckStep === 'analyzing' && !videoPreviewRef.current?.srcObject && ( // If video stream was stopped before analysis UI shows
+            {stressCheckStep === 'analyzing' && !videoPreviewRef.current?.srcObject && ( 
                  <div className="w-full h-48 sm:h-60 bg-gray-700 rounded-md flex items-center justify-center border border-gray-600">
-                    {/* Placeholder: Maybe show a static image or just the loader below */}
+                    
                 </div>
             )}
 
@@ -544,7 +538,7 @@ export default function LecturePage() {
                   >
                     Close
                   </button>
-              ) : ( // Capturing or Analyzing steps
+              ) : ( 
                  <button
                     onClick={handleCloseStressCheckModal}
                     className="w-full px-5 py-2.5 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 transition-colors font-medium"
