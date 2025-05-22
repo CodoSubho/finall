@@ -31,24 +31,24 @@ export default function ChatBot({ videoId, topic }: ChatBotProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const generatePdf = () => {
-    const doc = new jsPDF(); // Default unit is 'mm', pageSize is A4
+    const doc = new jsPDF(); 
 
-    const margin = 20; // mm
-    let yPos = margin; // mm
-    const pageHeight = doc.internal.pageSize.height; // mm
-    const pageWidth = doc.internal.pageSize.width; // mm
-    const contentWidth = pageWidth - margin * 2; // mm
+    const margin = 20; 
+    let yPos = margin; 
+    const pageHeight = doc.internal.pageSize.height; 
+    const pageWidth = doc.internal.pageSize.width; 
+    const contentWidth = pageWidth - margin * 2; 
 
-    const titleFontSize = 16; // pt
-    const messageFontSize = 10; // pt
+    const titleFontSize = 16; 
+    const messageFontSize = 10; 
 
     const getLineHeightInPageUnits = (fontSizeInPt: number) => {
-        return (fontSizeInPt / doc.internal.scaleFactor) * 1.4; // 1.4 line spacing
+        return (fontSizeInPt / doc.internal.scaleFactor) * 1.4; 
     };
 
-    // Add title
+    
     doc.setFontSize(titleFontSize);
-    doc.setTextColor(0, 0, 0); // Black for title
+    doc.setTextColor(0, 0, 0); 
     let currentLineHeight = getLineHeightInPageUnits(titleFontSize);
     const titleLines = doc.splitTextToSize(`Chat Conversation - ${topic}`, contentWidth);
     titleLines.forEach((line: string) => {
@@ -63,12 +63,12 @@ export default function ChatBot({ videoId, topic }: ChatBotProps) {
     });
     yPos += currentLineHeight * 0.5;
 
-    // Add messages
+    
     doc.setFontSize(messageFontSize);
     currentLineHeight = getLineHeightInPageUnits(messageFontSize);
 
-    const userColorHex = '#9333EA'; // Purple for User
-    const botColorHex = '#000000';   // PURE BLACK for Bot messages
+    const userColorHex = '#9333EA'; 
+    const botColorHex = '#000000';   
 
     const hexToRgb = (hex: string) => {
       const r = parseInt(hex.slice(1, 3), 16);
@@ -80,8 +80,7 @@ export default function ChatBot({ videoId, topic }: ChatBotProps) {
     messages.forEach((msg) => {
       const activeColorRGB = msg.isUser ? hexToRgb(userColorHex) : hexToRgb(botColorHex);
       const activeFont = msg.isUser ? 'helvetica' : 'courier';
-      // User's prefix "[You]:" will be bold, bot's "[Bot]:" will be normal.
-      // If you want bot's prefix bold as well, change 'normal' to 'bold' below for the bot.
+      
       const activeFontStyle = msg.isUser ? 'bold' : 'normal'; 
       
       doc.setFont(activeFont, activeFontStyle);
@@ -102,8 +101,8 @@ export default function ChatBot({ videoId, topic }: ChatBotProps) {
           doc.addPage();
           yPos = margin;
           doc.setFontSize(messageFontSize);
-          doc.setFont(activeFont, activeFontStyle); // Reset font for current message type
-          doc.setTextColor(activeColorRGB[0], activeColorRGB[1], activeColorRGB[2]); // Reset color for current message type
+          doc.setFont(activeFont, activeFontStyle); 
+          doc.setTextColor(activeColorRGB[0], activeColorRGB[1], activeColorRGB[2]); 
         }
         doc.text(line, margin, yPos);
         yPos += currentLineHeight;
