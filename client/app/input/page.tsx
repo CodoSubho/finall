@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import AnimatedGradientBg from "../components/AnimatedGradientBg"; 
 import NavBarLanding from "../NavBarLanding"; 
 
-// Helper function to extract YouTube Video ID
+// YouTube Video ID analyser
 function getYoutubeVideoId(url: string): string | null {
   if (!url) return null;
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -152,7 +152,7 @@ export default function InputPage() {
           </span>
         </motion.h1>
 
-        {/* Input Type Switcher */}
+      
         <motion.div className="flex space-x-3 p-1 rounded-xl bg-gray-500/20 dark:bg-gray-700/30" variants={itemVariants}>
           {(['topic', 'url'] as InputType[]).map((type) => (
             <button
@@ -180,8 +180,8 @@ export default function InputPage() {
           ))}
         </motion.div>
         
-        {/* Input Area Container for AnimatePresence */}
-        <div className="w-full h-[150px] sm:h-[140px]"> {/* Fixed height container to prevent layout jumps */}
+        
+        <div className="w-full h-[150px] sm:h-[140px]"> 
           <AnimatePresence mode="wait">
             {activeInputType === 'topic' && (
               <motion.div
