@@ -41,7 +41,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { message, videoId, topic } = requestSchema.parse(body);
 
-    // Fetch data from multiple sources independently
+   
     const [transcript, wikiContent] = await Promise.all([
       fetchTranscript(videoId),
       getWikipediaContent(topic),
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
 
     const model = genAI.getGenerativeModel({ model: 'models/gemini-1.5-flash' });
 
-    // Dynamic prompt construction based on available data
+    
     const prompt = `
 You are an educational assistant. Answer the user's question based on the following information:
 
